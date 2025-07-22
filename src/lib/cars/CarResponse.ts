@@ -6,3 +6,33 @@ export type CarResponseType = {
     description:string;
     image:string
 }
+
+export type CarCreateType ={
+      make: string;
+    model: string;
+    year: number;
+    price: number;
+    mileage: number;
+    description: string;
+    color: string;
+    fuel_type: string;
+    transmission: string;
+    image: string;
+
+}
+
+export type CarUpdatetype ={
+      make: string;
+    model: string;
+    year: number;
+    price: number;
+    mileage: number;
+    description: string;
+    color: string;
+    fuel_type: string;
+    transmission: string;
+    image: string;
+    isSold: boolean;
+
+}
+

@@ -8,7 +8,7 @@ import StoreProvider from './StoreProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Car Shop",
+  title: "bunvarn'car shop",
   description: "Car Shop Application built with Next.js and React",
   keywords: ["car", "discount", "modern", "luxeri", "web development"],
   authors: [{ name: "Marta Full Stack" }],

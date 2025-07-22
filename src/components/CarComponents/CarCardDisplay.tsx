@@ -1,8 +1,7 @@
 "use client"
 
 import { useGetCarsQuery } from "@/app/redux/service/cars/car"
-
-
+import { CardCarousel } from "../ui/card-carousel";
 export default function CarCardDisplay(){
     // declare data, isLoading, isFetchig ,error
 
@@ -15,13 +14,20 @@ export default function CarCardDisplay(){
     console.log(isLoading);
     console.log(isFetchig);
 
+    const images = data?.map(item=>({
+        src: item.image?.startsWith('http')? item.image:`https://car-nextjs-api.cheatdev.online/${item.image}`,
+        alt: item.make
+    })) ?? [];
+
     return(
         <div>
-          {
-            data?.map((item,index)=>(
-                <p key={index}>{item.make}</p>
-            ))
-          }
+
+                <CardCarousel
+        images={images}
+        autoplayDelay={2000}
+        showPagination={true}
+        showNavigation={true}
+      />
 
         </div>
     )
