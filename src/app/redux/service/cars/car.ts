@@ -1,13 +1,9 @@
 import { updateCar } from "@/lib/auth";
 import { CarCreateType, CarResponseType, CarUpdatetype } from "@/lib/cars/CarResponse";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { headers } from "next/headers";
+import { baseApi } from "../../baseApi";
 
-export const carApi = createApi({
-  reducerPath: "carSellingApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
-  }),
+export const carApi =baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // get ccar by using get method
     getCars: builder.query<CarResponseType[], { page: number; limit: number }>({
@@ -57,6 +53,7 @@ export const carApi = createApi({
       })
     }),
   }),
+  overrideExisting: false
 });
 
 export const {
