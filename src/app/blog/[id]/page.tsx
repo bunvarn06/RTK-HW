@@ -1,5 +1,5 @@
 
-import BlogComponent from "@/components/BlogComponent";
+import BlogComponent from "@/components/ui/BlogComponent";
 import {Metadata} from "next";
 
 const BASE_URL = "https://jsonplaceholder.typicode.com/posts";

@@ -3,7 +3,7 @@ import { Suspense } from "react"
 import "../globals.css"
 
 import BlogListSkeleton from "@/components/ui/Skelaton";
-import StyledComponentsRegistry from "@/components/AuthComponent/RegisterForm";
+// import StyledComponentsRegistry from "@/lib/register";
 import {Metadata} from "next";
 export const metadata: Metadata = {
     title: "Car Shop",
