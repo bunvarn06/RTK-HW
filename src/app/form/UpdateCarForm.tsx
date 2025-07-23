@@ -17,10 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { error } from "console";
 import { useUpdateCarMutation } from "@/app/redux/service/cars/car";
-import { CarUpdateType } from "@/lib/cars/CarResponse";
-import { id } from "zod/v4/locales";
+import { CarUpdatetype } from "@/lib/cars/CarResponse";
 
 const updateCarSchema = z.object({
   id: z.string().min(1, { message: "Make is required" }),
@@ -82,7 +80,7 @@ export default function UpdateCarFormComponent() {
 
   async function onSubmit(values: z.infer<typeof updateCarSchema>) {
     //update request body
-    const updateNewCar: CarUpdateType = {
+    const updateNewCar: CarUpdatetype = {
       make: values.make,
       model: values.model,
       year: values.year,
@@ -101,7 +99,7 @@ export default function UpdateCarFormComponent() {
     updateCar({
       updateCar: updateNewCar,
       accessToken: accessToken,
-      id: values.id,
+      // id: values.id,
     });
 
     console.log("the data", data);
