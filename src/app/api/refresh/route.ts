@@ -1,56 +1,65 @@
-import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-    try {
-        const { refreshToken } = await req.json();
 
-        console.log('=== REFRESH TOKEN API Debug 😎===');
-        console.log('Refresh token received:', refreshToken ? 'Found' : 'Missing');
+export async function GET() {
 
-        // if no refreshToken
-        if (!refreshToken) {
-            return NextResponse.json(
-                { message: 'Refresh token is required' },
-                { status: 400 }
-            );
-        }
-
-        // Call the external API to refresh the token
-        const response = await fetch(`https://car-nextjs-api.cheatdev.online/refresh-token`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ refresh_token: refreshToken })
-        });
-
-        const data = await response.json();
-        console.log('External refresh API response:', data);
-
-        // response
-        if (!response.ok) {
-            return NextResponse.json(
-                {
-                    message: data.message || 'Failed to refresh token',
-                    error: data.error || 'Token refresh failed'
-                },
-                { status: response.status }
-            );
-        }
-
-        // Return the new tokens (happy happy)
+    const cookieStore = cookies();
+    const cookieName =  process.env.CAR_TOKEN_NAME || "refreshToken";
+    const credential = (await cookieStore).get(cookieName);
+    
+    if(!credential){
         return NextResponse.json({
-            message: 'Token refreshed successfully',
-            token: data.access_token || data.token,
-            refreshToken: data.refresh_token || data.refreshToken
-        });
-
-    } catch (error) {
-        console.error('Refresh token API error:', error);
-        // error response from api occured
-        return NextResponse.json(
-            { message: 'Internal server error' },
-            { status: 500 }
-        );
+            message: "Credentail not found "
+        },
+        {
+            status: 404
+        }
+    )
     }
+    const refreshToken = credential.value;
+    console.log("The refresh token: ",refreshToken);
+
+    if(!refreshToken){
+        return NextResponse.json({
+            message: "The refresh token not found "
+        },
+    {
+        status:404
+    })
+    }
+//    handle refresh Token
+
+    const res =await fetch(`${process.env.NEXT_PUBLIC_API_URL}refresh-token`,{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:refreshToken
+        
+    })
+    if(!res){
+        return NextResponse.json({
+            message:"Refresh token not found"
+        },{
+            status:404
+        })
+    }
+    const data = await res.json();
+    const refresh = data?.refresh_token || null;
+    const access = data?.access_token || null;
+
+    (await cookieStore).set({
+        name:cookieName,
+        value: refresh,
+        httpOnly:true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite:"lax"
+    })
+
+    return NextResponse.json({
+        accessToken:access
+    },{
+        status: 200
+    })
 }
